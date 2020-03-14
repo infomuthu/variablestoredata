@@ -1,0 +1,165 @@
+<hello name="{{ name }}"></hello>
+<div class="container">
+  <br>
+
+<div class="row">
+  <div class="col-4">
+    <form [formGroup]="regForm" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input
+          formControlName="name"
+          id="name"
+          type="text"
+          class="form-control">
+        <div *ngIf="f.name.touched && f.name.invalid" class="alert alert-danger">
+          <div *ngIf="f.name.errors.required">Name is required.</div>
+          <div *ngIf="f.name.errors.minlength">Name should be 3 character.</div>
+          <div *ngIf="f.name.errors?.pattern"> User name not valid(Only use Characters and space).</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          formControlName="email"
+          id="email"
+          type="text"
+          class="form-control">
+        <div *ngIf="f.email.touched && f.email.invalid" class="alert alert-danger">
+          <div *ngIf="f.email.errors.required">Email is required.</div>
+          <div *ngIf="f.email.errors.email">Please, enter valid email address.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="age">Age</label>
+        <select class="form-control" formControlName="age">
+          <option [ngValue]="null" disabled>Choose your profile</option>
+          <option *ngFor="let age of ages " [ngValue]="age">{{age}}</option>
+        </select>
+        <div *ngIf="f.age.touched && f.age.invalid" class="alert alert-danger">
+          <div *ngIf="f.age.errors.required">Age is required.</div>
+          <div *ngIf="f.age.errors.age">Please, enter your age.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <div>
+          <input id="male" type="radio" value="male" name="gender" formControlName="gender">&nbsp;&nbsp;
+          <label for="male">Male</label> &nbsp;&nbsp;
+          <input id="female" type="radio" value="female" name="gender" formControlName="gender">&nbsp;&nbsp;
+          <label for="female">Female</label>
+       </div>
+
+        <div *ngIf=" f.gender.invalid" class="alert alert-danger">
+          <div *ngIf="f.gender.errors.required">Gender is required.</div>
+          <div *ngIf="f.gender.errors.gender">Please, Choose your Gender.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="mobile">Mobile</label>
+        <input
+          formControlName="mobile"
+          id="mobile"
+          type="text"
+          class="form-control">
+        <div *ngIf="f.mobile.touched && f.mobile.invalid" class="alert alert-danger">
+          <div *ngIf="f.mobile.errors.required">Mobile is required.</div>
+          <div *ngIf="f.mobile.errors.minlength">Mobile Number should be 10 character.</div>
+          <div *ngIf="f.mobile.errors?.pattern"> Mobile Number is not valid.</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="body">Body</label>
+        <textarea
+          formControlName="body"
+          id="body"
+          type="text"
+          class="form-control">
+        </textarea>
+        <div *ngIf="f.body.touched && f.body.invalid" class="alert alert-danger">
+          <div *ngIf="f.body.errors.required">Body is required.</div>
+        </div>
+      </div>
+<!--      <div class="form-group">-->
+        <div formArrayName="skills">
+          <label for="body">Hobbies</label>
+          <div
+            class="form-group"
+            *ngFor="let skill of skills.controls; let index = index; let last = last">
+            <input
+              type="text"
+              class="form-control"
+              [formControlName]="index"
+              title="skill"
+              required>
+<!--            <div *ngIf="f.skills.touched && f.skills.invalid" class="alert alert-danger">-->
+<!--              <div *ngIf="f.skills.errors.required">Skills is required.</div>-->
+<!--            </div>-->
+            <div class="row no-gutters">
+              <button
+                class="col-6 btn btn-outline-danger"
+                (click)="removeFeature(index)">
+                -
+              </button>
+              <button
+                class="col-6 btn btn-success"
+                *ngIf="last"
+                (click)="addFeature()">
+                +
+              </button>
+            </div>
+          </div>
+        </div>
+<!--      </div>-->
+      <div class="form-group">
+        <div class="form-check">
+          <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" id="hasChildren" name="hasChildren" formControlName="hasChildren"> I do not have any children
+              <div *ngIf="f.hasChildren.invalid" class="alert alert-danger">
+                <div *ngIf="f.hasChildren.errors.required">Check Box is required.</div>
+                
+              </div>
+            </label>
+        </div>
+      </div>
+      <button class="btn btn-info" type="button" (click)="resetValue()">Reset Value</button>
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+  </div>
+  <div class="col-8">
+    <div class="row">
+    <div class="col-10"></div>
+    <div class="col-2"><input type="text" placeholder="Search" [(ngModel)]="userenter"></div>
+  </div>
+  <br>
+    <table class="table table-bordered" >
+      <tr>
+        <th>S.No</th>
+        <th>First Name</th>
+        <th>Email</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Mobile</th>
+        <th>Content</th>
+        <th>Hobbies</th>
+        <th>Agree</th>
+        <th>Action</th>
+      </tr>
+      <tr *ngFor="let userList of listUser | fliterlist:userenter; let i= index ">
+        <td>{{i+1}}</td>
+        <td>{{userList.name}}</td>
+        <td>{{userList.email}}</td>
+        <td>{{userList.age}}</td>
+        <td>{{userList.gender}}</td>
+        <td>{{userList.mobile}}</td>
+        <td>{{userList.body}}</td>
+        <td>{{userList.skills}}</td>
+        <td>{{userList.hasChildren}}</td>
+        <td><button (click)="deleteUser(i)">Delete</button></td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+
